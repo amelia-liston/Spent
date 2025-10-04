@@ -1,2 +1,0 @@
-# Spent
-HackHarvard project
