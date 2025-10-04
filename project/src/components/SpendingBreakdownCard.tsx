@@ -35,9 +35,10 @@ export default function SpendingBreakdownCard({ title }: SpendingBreakdownCardPr
                 marginLeft: "1rem"
         };
         const marks = [
-            { value: 0, label: '$' },
-            { value: 1, label: '$$' },
-            { value: 2, label: '$$$' }
+            { value: 0, label: '$0' },
+            { value: 1, label: '$' },
+            { value: 2, label: '$$' },
+            { value: 3, label: '$$$' }
         ];
     return (
         <div style={cardStyle}>
@@ -57,7 +58,7 @@ export default function SpendingBreakdownCard({ title }: SpendingBreakdownCardPr
                                 defaultValue={0}
                                 step={1}
                                 min={0}
-                                max={2}
+                                max={3}
                                 marks={marks}
                                 valueLabelDisplay="off"
                             />
@@ -71,7 +72,7 @@ export default function SpendingBreakdownCard({ title }: SpendingBreakdownCardPr
                                 defaultValue={0}
                                 step={1}
                                 min={0}
-                                max={2}
+                                max={3}
                                 marks={marks}
                                 valueLabelDisplay="off"
                             />
