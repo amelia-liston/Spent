@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
+import { GoogleGenAI } from "@google/genai";
+
+// The client gets the API key from the environment variable `VITE_GEMINI_API_KEY`.
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const [calendarEvents, setCalendarEvents] = useState(null);
+
+  const [geminiResponse, setGeminiResponse] = useState(null);
 
   const login = useGoogleLogin({
     scope: 'https://www.googleapis.com/auth/calendar.readonly',
@@ -22,6 +28,13 @@ export default function Home() {
         );
         setCalendarEvents(res.data);
         console.log(res.data);
+
+        const response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: `How much do you think each of these calendar events will cost me in Boston: ${JSON.stringify(res.data.items)}`,
+        });
+        setGeminiResponse(response.text);
+        console.log(response.text);
       } catch (error) {
         console.error('Error fetching calendar events:', error);
       }
@@ -54,6 +67,15 @@ export default function Home() {
                 <h3>Your Calendar Events:</h3>
                 <pre style={{ textAlign: 'left', background: '#f4f4f4', padding: '1rem' }}>
                   {JSON.stringify(calendarEvents, null, 2)}
+                </pre>
+              </div>
+            )}
+
+            {geminiResponse && (
+              <div style={{ marginTop: '2rem' }}>
+                <h3>Gemini Response:</h3>
+                <pre style={{ textAlign: 'left', background: '#f4f4f4', padding: '1rem' }}>
+                  {geminiResponse}
                 </pre>
               </div>
             )}
