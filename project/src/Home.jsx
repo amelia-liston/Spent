@@ -88,8 +88,23 @@ export default function Home() {
         };
 
         const events = parseGeminiTable(response.text);
-  setGeminiEvents(events);
-  console.log(events);
+        // Filter events to only those within a week from now
+        const nowDate = new Date();
+        const oneWeekLater = new Date();
+        oneWeekLater.setDate(nowDate.getDate() + 7);
+        const weekEvents = events.filter(ev => {
+          // Try to parse start date
+          let startDate = ev.start;
+          if (startDate && typeof startDate === 'object' && startDate.dateTime) {
+            startDate = startDate.dateTime;
+          } else if (startDate && typeof startDate === 'object' && startDate.date) {
+            startDate = startDate.date;
+          }
+          const d = new Date(startDate);
+          return d >= nowDate && d < oneWeekLater;
+        });
+        setGeminiEvents(weekEvents);
+        console.log(weekEvents);
       } catch (error) {
         setLoadingGemini(false);
         console.error('Error fetching calendar events:', error);
