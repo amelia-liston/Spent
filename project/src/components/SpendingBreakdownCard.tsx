@@ -1,3 +1,42 @@
+// Child component for each event row
+function SpendingBreakdownRow({ event, rowStyle, eventStyle, priceStyle, sliderStyle }: {
+    event: { event_name: string; low: string; medium: string; high: string };
+    rowStyle: React.CSSProperties;
+    eventStyle: React.CSSProperties;
+    priceStyle: React.CSSProperties;
+    sliderStyle: React.CSSProperties;
+}) {
+    const eventName = event?.event_name || 'Unknown Event';
+    const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
+    const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
+    const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
+    const priceValues = [0, low, medium, high];
+    const marks = [
+        { value: 0, label: '$0' },
+        { value: 1, label: `$${low}` },
+        { value: 2, label: `$${medium}` },
+        { value: 3, label: `$${high}` }
+    ];
+    // Default value is low (index 1)
+    const [sliderValue, setSliderValue] = React.useState(1);
+    return (
+        <div style={rowStyle}>
+            <div style={eventStyle}><p>{eventName}</p></div>
+            <div style={priceStyle}><p>${priceValues[sliderValue]}</p></div>
+            <div style={sliderStyle}>
+                <Slider
+                    value={sliderValue}
+                    onChange={(_, val) => setSliderValue(val as number)}
+                    step={1}
+                    min={0}
+                    max={3}
+                    marks={marks}
+                    valueLabelDisplay="off"
+                />
+            </div>
+        </div>
+    );
+}
 // Utility to sum all 'low' values in events array
 export function sumLowValues(events: Array<{ low: string }>) {
     if (!Array.isArray(events)) return 0;
@@ -86,35 +125,16 @@ export default function SpendingBreakdownCard({ title, events = [], loading = fa
                                         <span>No events found.</span>
                                     </div>
                                 ) : (
-                                    safeEvents.map((event, idx) => {
-                                        // Defensive: check event structure
-                                        const eventName = event?.event_name || 'Unknown Event';
-                                        const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
-                                        const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
-                                        const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
-                                        const marks = [
-                                            { value: 0, label: '$0' },
-                                            { value: 1, label: `$${low}` },
-                                            { value: 2, label: `$${medium}` },
-                                            { value: 3, label: `$${high}` }
-                                        ];
-                                        return (
-                                            <div style={rowStyle} key={idx}>
-                                                <div style={eventStyle}><p>{eventName}</p></div>
-                                                <div style={priceStyle}><p>${low}</p></div>
-                                                <div style={sliderStyle}>
-                                                    <Slider
-                                                        defaultValue={1}
-                                                        step={1}
-                                                        min={0}
-                                                        max={3}
-                                                        marks={marks}
-                                                        valueLabelDisplay="off"
-                                                    />
-                                                </div>
-                                            </div>
-                                        );
-                                    })
+                                    safeEvents.map((event, idx) => (
+                                        <SpendingBreakdownRow
+                                            key={idx}
+                                            event={event}
+                                            rowStyle={rowStyle}
+                                            eventStyle={eventStyle}
+                                            priceStyle={priceStyle}
+                                            sliderStyle={sliderStyle}
+                                        />
+                                    ))
                                 )
                             )}
                             </>
