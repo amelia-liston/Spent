@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Slider from '@mui/material/Slider';
 
 type SpendingBreakdownCardProps = {
     title: string;
@@ -24,19 +25,20 @@ export default function SpendingBreakdownCard({ title }: SpendingBreakdownCardPr
         marginBottom: "1rem"
     };
     const eventStyle: React.CSSProperties = {
-        width: "30%"
+        width: "20%"
     };
     const priceStyle: React.CSSProperties = {
-        width: "30%"
+        width: "20%"
     };
-    const scaleStyle: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "0.5rem",
-        width: "40%"
-    };
+        const sliderStyle: React.CSSProperties = {
+                width: "60%",
+                marginLeft: "1rem"
+        };
+        const marks = [
+            { value: 0, label: '$' },
+            { value: 1, label: '$$' },
+            { value: 2, label: '$$$' }
+        ];
     return (
         <div style={cardStyle}>
             <h3
@@ -45,28 +47,38 @@ export default function SpendingBreakdownCard({ title }: SpendingBreakdownCardPr
             >
                 {title} {open ? "▲" : "▼"}
             </h3>
-                        {open && (
-                                <>
-                                    <div style={rowStyle}>
-                                        <div style={eventStyle}><p>Event 1</p></div>
-                                        <div style={priceStyle}><p>$10</p></div>
-                                        <div style={scaleStyle}>
-                                            <span>$</span>
-                                            <span>$$</span>
-                                            <span>$$$</span>
-                                        </div>
-                                    </div>
-                                    <div style={rowStyle}>
-                                        <div style={eventStyle}><p>Event 2</p></div>
-                                        <div style={priceStyle}><p>$20</p></div>
-                                        <div style={scaleStyle}>
-                                            <span>$</span>
-                                            <span>$$</span>
-                                            <span>$$$</span>
-                                        </div>
-                                    </div>
-                                </>
-                        )}
+            {open && (
+                <>
+                    <div style={rowStyle}>
+                        <div style={eventStyle}><p>Event 1</p></div>
+                        <div style={priceStyle}><p>$10</p></div>
+                        <div style={sliderStyle}>
+                            <Slider
+                                defaultValue={0}
+                                step={1}
+                                min={0}
+                                max={2}
+                                marks={marks}
+                                valueLabelDisplay="off"
+                            />
+                        </div>
+                    </div>
+                    <div style={rowStyle}>
+                        <div style={eventStyle}><p>Event 2</p></div>
+                        <div style={priceStyle}><p>$20</p></div>
+                        <div style={sliderStyle}>
+                            <Slider
+                                defaultValue={0}
+                                step={1}
+                                min={0}
+                                max={2}
+                                marks={marks}
+                                valueLabelDisplay="off"
+                            />
+                        </div>
+                    </div>
+                </>
+             )}
         </div>
     );
 }
