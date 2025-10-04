@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 type SpendingBreakdownCardProps = {
     title: string;
 };
 
 export default function SpendingBreakdownCard({ title }: SpendingBreakdownCardProps) {
+    const [open, setOpen] = useState(false);
     const cardStyle = {
     boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
     borderRadius: "8px",
@@ -21,20 +22,25 @@ export default function SpendingBreakdownCard({ title }: SpendingBreakdownCardPr
     width: "48%"
   };
     return (
-        <>
-            <div style={cardStyle}>
-                <h3>{title}</h3>
-                    <div style={columnsStyle}>
-                        <div style={columnStyle}>
-                            <p>Placeholder text 1A</p>
-                            <p>Placeholder text 1B</p>
-                        </div>
+        <div style={cardStyle}>
+            <h3
+                style={{ cursor: "pointer", userSelect: "none" }}
+                onClick={() => setOpen((prev) => !prev)}
+            >
+                {title} {open ? "▲" : "▼"}
+            </h3>
+            {open && (
+                <div style={columnsStyle}>
+                    <div style={columnStyle}>
+                        <p>Placeholder text 1A</p>
+                        <p>Placeholder text 1B</p>
+                    </div>
                     <div style={columnStyle}>
                         <p>Placeholder text 1C</p>
                         <p>Placeholder text 1D</p>
                     </div>
                 </div>
-            </div>
-        </>
-    )
+            )}
+        </div>
+    );
 }
