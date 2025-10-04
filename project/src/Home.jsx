@@ -47,7 +47,7 @@ export default function Home() {
 
         const response = await ai.models.generateContent({
           model: "gemini-2.5-flash",
-          contents: `How much do you think each of these calendar events will cost me in Boston? Please output as a table with columns event_name, location, start, and end, as well as columns for the low, medium, and high prices for the activity and columns for each price detailing what each price includes separated by | . Only give me one price per category, not a range. This should help me estimate how much each event will cost me based on my decisions.  ${JSON.stringify(res.data.items)}`,
+          contents: `How much do you think each of these calendar events will cost me in Boston? Please output as a table with columns event_name, location, start, and end, as well as columns for the low, medium, and high prices for the activity and columns for each price detailing what each price includes separated by commas. Only give me one price per category, not a range. This should help me estimate how much each event will cost me based on my decisions.  ${JSON.stringify(res.data.items)}`,
         });
   setGeminiResponse(response.text);
   setLoadingGemini(false);
