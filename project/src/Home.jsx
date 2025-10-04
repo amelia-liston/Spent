@@ -3,6 +3,7 @@ import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
 import { GoogleGenAI } from "@google/genai";
 import Dashboard from "./Dashboard";
+import Questionnaire from "./components/Questionnaire";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 // The client gets the API key from the environment variable `VITE_GEMINI_API_KEY`.
@@ -135,7 +136,7 @@ export default function Home() {
                 </pre>
               </div>
             )}
-
+            <Questionnaire />
             <div style={{ marginTop: '2rem' }}>
               <ErrorBoundary>
                 <Dashboard
