@@ -1,3 +1,11 @@
+// Utility to sum all 'low' values in events array
+export function sumLowValues(events: Array<{ low: string }>) {
+    if (!Array.isArray(events)) return 0;
+    return events.reduce((acc, event) => {
+        const val = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
+        return acc + val;
+    }, 0);
+}
 import React, { useState } from "react";
 import Slider from '@mui/material/Slider';
 
@@ -81,7 +89,7 @@ export default function SpendingBreakdownCard({ title, events = [], loading = fa
                                     safeEvents.map((event, idx) => {
                                         // Defensive: check event structure
                                         const eventName = event?.event_name || 'Unknown Event';
-                                         const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
+                                        const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
                                         const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
                                         const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
                                         const marks = [
