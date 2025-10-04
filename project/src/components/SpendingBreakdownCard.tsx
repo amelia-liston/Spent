@@ -17,11 +17,13 @@ export default function SpendingBreakdownCard({ title, events = [], loading = fa
         let safeEvents = Array.isArray(events) ? events : [];
         // Filter out events with all $0 values for low, medium, and high
         safeEvents = safeEvents.filter(event => {
-            const low = Number(event?.low) || 0;
-            const medium = Number(event?.medium) || 0;
-            const high = Number(event?.high) || 0;
-            return low !== 0 || medium !== 0 || high !== 0;
+            const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
+            const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
+            const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
+            console.log("Event:", event, "high:", high);
+            return low !== 0;
         });
+        console.log("Filtered Events:", safeEvents);
     const [open, setOpen] = useState(false);
         const cardStyle = {
         boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
@@ -79,9 +81,9 @@ export default function SpendingBreakdownCard({ title, events = [], loading = fa
                                     safeEvents.map((event, idx) => {
                                         // Defensive: check event structure
                                         const eventName = event?.event_name || 'Unknown Event';
-                                        const low = Number(event?.low) || 0;
-                                        const medium = Number(event?.medium) || 0;
-                                        const high = Number(event?.high) || 0;
+                                         const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
+                                        const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
+                                        const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
                                         const marks = [
                                             { value: 0, label: '$0' },
                                             { value: 1, label: `$${low}` },
