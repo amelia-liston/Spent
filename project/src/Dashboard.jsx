@@ -3,7 +3,7 @@ import SpendingBreakdownCard, { sumLowValues } from "./components/SpendingBreakd
 
 
 
-export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMonth = false }) {
+export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMonth = false, amountToSpend = 0 }) {
   // monthWeeks: { weekNum: [events] }
 
   const [week1SliderValues, setWeek1SliderValues] = React.useState(
@@ -91,19 +91,19 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
       <h1>Dashboard</h1>
       <h2>1 Week Breakdown</h2>
       <SpendingBreakdownCard
-        title={`1 Week: $${weekTotal}`}
+        title={`1 Week: $${weekTotal}/${amountToSpend}`}
         events={monthWeeks["1"] || []}
         loading={loadingMonth}
         sliderValues={week1SliderValues}
         onSliderChange={handleWeek1SliderChange}
       />
       <h2>Monthly Spending Summary</h2>
-      <h3 style={{ marginBottom: '1rem', color: '#2d3748' }}>Month Total: ${monthTotal}</h3>
+      <h3 style={{ marginBottom: '1rem', color: '#2d3748' }}>Month Total: ${monthTotal}/{amountToSpend}</h3>
       <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
         {Object.keys(monthWeeks).map(weekNum => (
           <div key={weekNum} style={{ flex: '1 1 300px', minWidth: 300 }}>
             <SpendingBreakdownCard
-              title={`Week ${weekNum}: $${weekTotals[weekNum]}`}
+              title={`Week ${weekNum}: $${weekTotals[weekNum]}/${amountToSpend}`}
               events={monthWeeks[weekNum]}
               loading={loadingMonth}
               sliderValues={weekNum === "1" ? week1SliderValues : sliderStates[weekNum]}

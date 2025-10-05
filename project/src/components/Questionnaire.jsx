@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardContent, Button, TextField, MenuItem, Typography } from '@mui/material';
 
-export default function Questionnaire({ setCity, onSubmit }) {
+export default function Questionnaire({ setCity, setAmountToSpend, onSubmit }) {
     const [city, setCityState] = useState("");
     const [groceries, setGroceries] = useState("");
     const [dineOut, setDineOut] = useState("");
@@ -25,6 +25,9 @@ export default function Questionnaire({ setCity, onSubmit }) {
         setSubmitted(true);
         if (typeof setCity === 'function') {
             setCity(city);
+        }
+        if (typeof setAmountToSpend === 'function') {
+            setAmountToSpend(Number(amount) || 0);
         }
         if (typeof onSubmit === 'function') {
             onSubmit(city);
