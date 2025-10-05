@@ -47,11 +47,13 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
       const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
       const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
       const priceValues = [0, low, medium, high];
+      let sliderIdx;
       if (weekNum === "1") {
-        return acc + priceValues[week1SliderValues[idx] || 1];
+        sliderIdx = typeof week1SliderValues[idx] === 'number' ? week1SliderValues[idx] : 1;
       } else {
-        return acc + priceValues[sliderStates[weekNum]?.[idx] || 1];
+        sliderIdx = typeof sliderStates[weekNum]?.[idx] === 'number' ? sliderStates[weekNum][idx] : 1;
       }
+      return acc + priceValues[sliderIdx];
     }, 0);
   });
 
@@ -72,13 +74,15 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
       return updated;
     });
   };
-  const weekTotal = weekEvents.reduce((acc, event, idx) => {
-    const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
-    const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
-    const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
-    const priceValues = [0, low, medium, high];
-    return acc + priceValues[week1SliderValues[idx] || 1];
-  }, 0);
+  // 1 week breakdown uses week 1 state and events
+  const weekTotal = monthWeeks["1"] ? monthWeeks["1"].reduce((acc, event, idx) => {
+  const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
+  const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
+  const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
+  const priceValues = [0, low, medium, high];
+  const sliderIdx = typeof week1SliderValues[idx] === 'number' ? week1SliderValues[idx] : 1;
+  return acc + priceValues[sliderIdx];
+  }, 0) : 0;
 
   return (
     <div>

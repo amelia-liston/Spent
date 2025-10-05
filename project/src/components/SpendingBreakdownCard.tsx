@@ -128,7 +128,7 @@ export default function SpendingBreakdownCard({ title, events = [], loading = fa
                                     eventStyle={eventStyle}
                                     priceStyle={priceStyle}
                                     sliderStyle={sliderStyle}
-                                    sliderValue={sliderValues[idx] || 1}
+                                    sliderValue={sliderValues[idx] ?? 0}
                                     onSliderChange={safeOnSliderChange}
                                     idx={idx}
                                 />
