@@ -1,4 +1,3 @@
-
 import React from "react";
 import SpendingBreakdownCard, { sumLowValues } from "./components/SpendingBreakdownCard";
 
@@ -57,6 +56,9 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
     }, 0);
   });
 
+  // Calculate monthly total as sum of weekTotals
+  const monthTotal = Object.values(weekTotals).reduce((acc, val) => acc + val, 0);
+
   // Handler for slider change in week 1
   const handleWeek1SliderChange = (eventIdx, value) => {
     setWeek1SliderValues(prev => {
@@ -96,6 +98,7 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
         onSliderChange={handleWeek1SliderChange}
       />
       <h2>Monthly Spending Summary</h2>
+      <h3 style={{ marginBottom: '1rem', color: '#2d3748' }}>Month Total: ${monthTotal}</h3>
       <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
         {Object.keys(monthWeeks).map(weekNum => (
           <div key={weekNum} style={{ flex: '1 1 300px', minWidth: 300 }}>
