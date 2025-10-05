@@ -59,6 +59,44 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
   // Calculate monthly total as sum of weekTotals
   const monthTotal = Object.values(weekTotals).reduce((acc, val) => acc + val, 0);
 
+  // Calculate 4 month totals
+  const fourMonthTotals = [0, 1, 2, 3].map(monthOffset => {
+    const monthStart = new Date();
+    monthStart.setMonth(monthStart.getMonth() + monthOffset);
+    const monthEnd = new Date(monthStart);
+    monthEnd.setMonth(monthStart.getMonth() + 1);
+    let total = 0;
+    Object.values(monthWeeks).forEach(eventsArr => {
+      eventsArr.forEach(ev => {
+        let startDate = ev.start;
+        if (startDate && typeof startDate === 'object' && startDate.dateTime) {
+          startDate = startDate.dateTime;
+        } else if (startDate && typeof startDate === 'object' && startDate.date) {
+          startDate = startDate.date;
+        }
+        const d = new Date(startDate);
+        if (d >= monthStart && d < monthEnd) {
+          const low = Number((ev.low || '').replace(/[^0-9.]/g, '')) || 0;
+          const medium = Number((ev.medium || '').replace(/[^0-9.]/g, '')) || 0;
+          const high = Number((ev.high || '').replace(/[^0-9.]/g, '')) || 0;
+          const priceValues = [0, low, medium, high];
+          // Use slider value if available, else default to 1
+          let sliderIdx = 1;
+          // Find weekNum for this event
+          const weekNum = Object.keys(monthWeeks).find(wn => monthWeeks[wn].includes(ev));
+          if (weekNum) {
+            const idx = monthWeeks[weekNum].indexOf(ev);
+            sliderIdx = weekNum === "1"
+              ? (typeof week1SliderValues[idx] === 'number' ? week1SliderValues[idx] : 1)
+              : (typeof sliderStates[weekNum]?.[idx] === 'number' ? sliderStates[weekNum][idx] : 1);
+          }
+          total += priceValues[sliderIdx];
+        }
+      });
+    });
+    return total;
+  });
+
   // Handler for slider change in week 1
   const handleWeek1SliderChange = (eventIdx, value) => {
     setWeek1SliderValues(prev => {
@@ -114,6 +152,19 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
             />
           </div>
         ))}
+      </div>
+      <div style={{ marginTop: '2rem', width: '80%', maxWidth: '1000px', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1rem", background: "#fff" }}>
+          <h2 style={{ marginBottom: '1rem', color: '#2d3748' }}>Semester Summary</h2>
+          <h3 style={{ marginBottom: '1rem', color: '#2d3748' }}>4 Month Totals</h3>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {fourMonthTotals.map((total, i) => (
+              <li key={i} style={{ marginBottom: '0.5em', fontSize: '1.1em' }}>
+                Month {i + 1}: ${total}/{amountToSpend}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
