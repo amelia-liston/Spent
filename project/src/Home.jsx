@@ -16,6 +16,7 @@ export default function Home() {
   const [geminiEvents, setGeminiEvents] = useState([]);
   const [loadingGemini, setLoadingGemini] = useState(false);
   const [city, setCity] = useState("");
+  const [questionnaireSubmitted, setQuestionnaireSubmitted] = useState(false);
 
   const login = useGoogleLogin({
     scope: 'https://www.googleapis.com/auth/calendar.readonly',
@@ -151,6 +152,7 @@ export default function Home() {
 
   // This function will be called by Questionnaire on submit
   const fetchCalendarAndGemini = async (cityValue) => {
+    setQuestionnaireSubmitted(true);
     if (!user) return;
     setLoadingGemini(true);
     try {
@@ -255,15 +257,17 @@ export default function Home() {
               </div>
             )}
             <Questionnaire setCity={setCity} onSubmit={fetchCalendarAndGemini} />
-            <div style={{ marginTop: '2rem' }}>
-              <ErrorBoundary>
-                <Dashboard
-                  monthWeeks={geminiEvents.monthWeeks}
-                  weekEvents={geminiEvents.weekEvents}
-                  loadingMonth={loadingGemini}
-                />
-              </ErrorBoundary>
-            </div>
+            {questionnaireSubmitted && (
+              <div style={{ marginTop: '2rem' }}>
+                <ErrorBoundary>
+                  <Dashboard
+                    monthWeeks={geminiEvents.monthWeeks}
+                    weekEvents={geminiEvents.weekEvents}
+                    loadingMonth={loadingGemini}
+                  />
+                </ErrorBoundary>
+              </div>
+            )}
           </div>
         )}
       </div>
