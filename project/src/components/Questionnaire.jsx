@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Card, CardContent, Button, TextField, MenuItem, Typography } from '@mui/material';
 
-export default function Questionnaire() {
-    const [city, setCity] = useState("");
+export default function Questionnaire({ setCity, onSubmit }) {
+    const [city, setCityState] = useState("");
     const [groceries, setGroceries] = useState("");
     const [dineOut, setDineOut] = useState("");
     const [goOut, setGoOut] = useState("");
@@ -23,6 +23,12 @@ export default function Questionnaire() {
         setSavedGoOut(goOut);
         setSavedAmount(amount);
         setSubmitted(true);
+        if (typeof setCity === 'function') {
+            setCity(city);
+        }
+        if (typeof onSubmit === 'function') {
+            onSubmit(city);
+        }
     };
 
     return (
@@ -33,7 +39,7 @@ export default function Questionnaire() {
                     <TextField
                         label="What is your primary location? (City, State)"
                         value={city}
-                        onChange={e => setCity(e.target.value)}
+                        onChange={e => setCityState(e.target.value)}
                         fullWidth
                         margin="normal"
                     />
@@ -95,7 +101,7 @@ export default function Questionnaire() {
                         <Typography>Grocery Spend: {savedGroceries}</Typography>
                         <Typography>Amount for Dining Out: {savedDineOut}</Typography>
                         <Typography>Amount for Going Out: {savedGoOut}</Typography>
-                        <Typography>Amount to Spend: {savedAmount}</Typography>
+                        <Typography>Amount to Spend: ${savedAmount}</Typography>
                     </div>
                 )}
             </CardContent>

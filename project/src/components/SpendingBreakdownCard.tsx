@@ -67,10 +67,9 @@ export default function SpendingBreakdownCard({ title, events = [], loading = fa
             const low = Number((event?.low || '').replace(/[^0-9.]/g, '')) || 0;
             const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
             const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
-            console.log("Event:", event, "high:", high);
             return low !== 0;
         });
-        console.log("Filtered Events:", safeEvents);
+    
     const [open, setOpen] = useState(false);
         const cardStyle = {
         boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
