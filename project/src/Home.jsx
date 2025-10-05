@@ -47,7 +47,7 @@ export default function Home() {
 
         const response = await ai.models.generateContent({
           model: "gemini-2.5-flash",
-          contents: `How much do you think each of these calendar events will cost me in Boston? Please output as a table with columns event_name, location, start, and end, as well as columns for the low, medium, and high prices for the activity and columns for each price detailing what each price includes separated by | . Only give me one price per category, not a range. This should help me estimate how much each event will cost me based on my decisions.  ${JSON.stringify(res.data.items)}`,
+          contents: `How much do you think each of these calendar events will cost me in Boston? Please output as a table with columns event_name, location, start, and end, as well as columns for the low, medium, and high prices for the activity and columns for each price detailing what each price includes separated by commas. Only give me one price per category, not a range. This should help me estimate how much each event will cost me based on my decisions.  ${JSON.stringify(res.data.items)}`,
         });
   setGeminiResponse(response.text);
   setLoadingGemini(false);
@@ -88,8 +88,55 @@ export default function Home() {
         };
 
         const events = parseGeminiTable(response.text);
-  setGeminiEvents(events);
-  console.log(events);
+        // Group events by week for the next month
+        const nowDate = new Date();
+        const oneMonthLater = new Date();
+        oneMonthLater.setMonth(nowDate.getMonth() + 1);
+        // Helper to get week number from date
+        function getWeekNumber(date) {
+          const start = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate());
+          const diff = (date - start) / (1000 * 60 * 60 * 24);
+          return Math.floor(diff / 7) + 1;
+        }
+        // Parse and group
+        const monthEvents = events.filter(ev => {
+          let startDate = ev.start;
+          if (startDate && typeof startDate === 'object' && startDate.dateTime) {
+            startDate = startDate.dateTime;
+          } else if (startDate && typeof startDate === 'object' && startDate.date) {
+            startDate = startDate.date;
+          }
+          const d = new Date(startDate);
+          return d >= nowDate && d < oneMonthLater;
+        });
+        const weeks = {};
+        monthEvents.forEach(ev => {
+          let startDate = ev.start;
+          if (startDate && typeof startDate === 'object' && startDate.dateTime) {
+            startDate = startDate.dateTime;
+          } else if (startDate && typeof startDate === 'object' && startDate.date) {
+            startDate = startDate.date;
+          }
+          const d = new Date(startDate);
+          const weekNum = getWeekNumber(d);
+          if (!weeks[weekNum]) weeks[weekNum] = [];
+          weeks[weekNum].push(ev);
+        });
+        // Also filter for just the next week
+        const oneWeekLater = new Date();
+        oneWeekLater.setDate(nowDate.getDate() + 7);
+        const weekEvents = events.filter(ev => {
+          let startDate = ev.start;
+          if (startDate && typeof startDate === 'object' && startDate.dateTime) {
+            startDate = startDate.dateTime;
+          } else if (startDate && typeof startDate === 'object' && startDate.date) {
+            startDate = startDate.date;
+          }
+          const d = new Date(startDate);
+          return d >= nowDate && d < oneWeekLater;
+        });
+        setGeminiEvents({ monthWeeks: weeks, weekEvents });
+        console.log({ monthWeeks: weeks, weekEvents });
       } catch (error) {
         setLoadingGemini(false);
         console.error('Error fetching calendar events:', error);
@@ -139,8 +186,9 @@ export default function Home() {
             <div style={{ marginTop: '2rem' }}>
               <ErrorBoundary>
                 <Dashboard
-                  weekEvents={geminiEvents}
-                  loadingWeek={loadingGemini}
+                  monthWeeks={geminiEvents.monthWeeks}
+                  weekEvents={geminiEvents.weekEvents}
+                  loadingMonth={loadingGemini}
                 />
               </ErrorBoundary>
             </div>
