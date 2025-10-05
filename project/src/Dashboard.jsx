@@ -137,9 +137,9 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
       />
       <h2>Monthly Spending Summary</h2>
       <h3 style={{ marginBottom: '1rem', color: '#2d3748' }}>Month Total: ${monthTotal}/{amountToSpend}</h3>
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', width: '100%' }}>
         {Object.keys(monthWeeks).map(weekNum => (
-          <div key={weekNum} style={{ flex: '1 1 300px', minWidth: 300 }}>
+          <div key={weekNum} style={{ width: '80%', maxWidth: '1000px', margin: '0 auto' }}>
             <SpendingBreakdownCard
               title={`Week ${weekNum}: $${weekTotals[weekNum]}/${amountToSpend}`}
               events={monthWeeks[weekNum]}

@@ -35,7 +35,7 @@ export default function Questionnaire({ setCity, setAmountToSpend, onSubmit }) {
     };
 
     return (
-        <Card style={{ maxWidth: 500, margin: "2rem auto", boxShadow: "0 2px 8px rgba(0,0,0,0.15)", borderRadius: "20px" }}>
+        <Card style={{ maxWidth: 500, margin: "2rem auto", boxShadow: "0 2px 8px #00c8538e", borderRadius: "32px" }}>
             <CardContent>
                 <Typography variant="h5" gutterBottom><b>Questionnaire</b></Typography>
                 <form onSubmit={handleSubmit}>
@@ -99,7 +99,7 @@ export default function Questionnaire({ setCity, setAmountToSpend, onSubmit }) {
                 </form>
                 {submitted && (
                     <div style={{ marginTop: "1.5rem" }}>
-                        <Typography variant="subtitle1">Saved Values:</Typography>
+                        <Typography variant="subtitle1">Your Inputs:</Typography>
                         <Typography>City: {savedCity}</Typography>
                         <Typography>Grocery Spend: {savedGroceries}</Typography>
                         <Typography>Amount for Dining Out: {savedDineOut}</Typography>

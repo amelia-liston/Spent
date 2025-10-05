@@ -35,14 +35,15 @@ h1 {
 
 nav {
   padding: 1rem;
-  background: #f0f0f0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: #edfff5;
+  box-shadow: 0 2px 8px #00c8538e;
   display: flex;
   justify-content: center;
   border-radius: 100px;
   width: 30%;
   margin: 1rem auto;
   font-size: 1.5rem;
+  gap: 2rem;
 }
 
 button {

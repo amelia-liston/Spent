@@ -157,14 +157,14 @@ export default function Home() {
 
   return (
     <div>
-      <h1><i>Spent</i></h1>
+      <h1 style={{color: '#FF69B4', fontWeight: 900,  textDecoration: 'none', letterSpacing: 2}}>SPENT</h1>
       <h2>Welcome to Spent! Log in and fill out the questionnaire to view your spending predictions.</h2>
       <div style={{ marginTop: '2rem' }}>
         {!user ? (
           <button onClick={() => login()}>Sign in with Google</button>
         ) : (
           <div>
-            <p>Logged in!</p>
+            <p style={{color: '#3D5AFE'}}>Logged in!</p>
             <button onClick={handleLogout}>Logout</button>
             {calendarEvents && (
               <div style={{ marginTop: '2rem' }}>
