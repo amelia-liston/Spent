@@ -8,8 +8,8 @@ function App() {
   return (
     <Router>
       <nav>
-        <Link to="/" style={{ marginRight: "1rem" }}>Home</Link>
-        <Link to="/about" style={{ marginRight: "1rem" }}>About</Link>
+         <Link to="/" style={{ color: '#FF69B4', fontWeight: 900,  textDecoration: 'none', letterSpacing: 2 }}>SPENT</Link>
+         <Link to="/about" style={{ color: '#3D5AFE', fontWeight: 700, textDecoration: 'none' }}>About</Link>
       </nav>
       <div style={{ padding: "2rem" }}>
         <Routes>
