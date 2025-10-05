@@ -47,7 +47,11 @@ export default function Dashboard({ monthWeeks = {}, weekEvents = [], loadingMon
       const medium = Number((event?.medium || '').replace(/[^0-9.]/g, '')) || 0;
       const high = Number((event?.high || '').replace(/[^0-9.]/g, '')) || 0;
       const priceValues = [0, low, medium, high];
-      return acc + priceValues[sliderStates[weekNum]?.[idx] || 1];
+      if (weekNum === "1") {
+        return acc + priceValues[week1SliderValues[idx] || 1];
+      } else {
+        return acc + priceValues[sliderStates[weekNum]?.[idx] || 1];
+      }
     }, 0);
   });
 
