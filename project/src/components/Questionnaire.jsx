@@ -32,9 +32,9 @@ export default function Questionnaire({ setCity, onSubmit }) {
     };
 
     return (
-        <Card style={{ maxWidth: 500, margin: "2rem auto", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
+        <Card style={{ maxWidth: 500, margin: "2rem auto", boxShadow: "0 2px 8px rgba(0,0,0,0.15)", borderRadius: "20px" }}>
             <CardContent>
-                <Typography variant="h5" gutterBottom>Questionnaire</Typography>
+                <Typography variant="h5" gutterBottom><b>Questionnaire</b></Typography>
                 <form onSubmit={handleSubmit}>
                     <TextField
                         label="What is your primary location? (City, State)"
