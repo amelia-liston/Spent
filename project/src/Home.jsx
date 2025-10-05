@@ -230,8 +230,8 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Home Page</h1>
-      <p>Welcome to the Spent!</p>
+      <h1><i>Spent</i></h1>
+      <h2>Welcome to Spent! Log in and fill out the questionnaire to view your spending predictions.</h2>
       <div style={{ marginTop: '2rem' }}>
         {!user ? (
           <button onClick={() => login()}>Sign in with Google</button>
